@@ -23,10 +23,12 @@ if [[ -f "gitcompletion.tar" ]]; then
   $(grep "$cmd" $bash_file)
   if [[ $? -eq 0 ]]; then
     echo "Not adding anything to $bash_file, the line was already present."
-    (($?)) || echo "Git completion installed successfully"
   else
     echo "$cmd" >> $bash_file
-    (($?)) || echo "Git completion installed successfully"
+    (($?)) && "couldn't append to $bash_file"
   fi 
+  $(source $bash_file)
+  (($?)) && error "Failed to source the file in the current shell"
+  echo "Git completion installed successfully"
 
 fi
